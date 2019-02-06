@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+        <meta charset="utf-8" />
+
+        <title>Demo Chat</title>
+
+        <link href="bootstrap.css" rel="stylesheet">
+
+	<style>
+		body {
+			padding:20px;
+		}
+		#console {
+			height: 400px;
+			overflow: auto;
+		}
+		.username-msg {color:orange;}
+		.connect-msg {color:green;}
+		.disconnect-msg {color:red;}
+		.send-msg {color:#888}
+	</style>
+
+
+	<script src="js/socket.io/socket.io.js"></script>
+        <script src="js/moment.min.js"></script>
+        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+	<script>
+
+        var userName = 'user' + Math.floor((Math.random()*1000)+1);
+		var socket =  io.connect('http://localhost:8000/game');
+
+		socket.on('connect', function() {
+			createUser(userName);
+            console.log("connected");
+			output('<span class="connect-msg">Client has connected to the server!</span>');
+		});
+
+        socket.on('playerJoined', function(data) {
+            console.log("playerJoined")
+			output('<span class="username-msg">' + userName + ':</span> ' + data);
+        });
+
+        socket.on('playerAdded', function(data) {
+            console.log({ data });
+            // userName = data.userName
+        });
+
+        socket.on('mapUpdate', function(data) {
+            console.log("mapUpdate", { data } );
+		});
+
+		socket.on('disconnect', function() {
+            console.log("disconnect")
+			output('<span class="disconnect-msg">The client has disconnected!</span>');
+		});
+
+        function sendDisconnect() {
+            socket.emit('playerLeft', userName);
+            socket.disconnect();
+        }
+
+		function createUser() {
+            socket.emit('playerJoined', userName);
+		}
+
+		function playerMovement(playerMovement) {
+            var jsonObject = Object.assign({}, { userName } , playerMovement);
+            console.log({ jsonObject })
+            socket.emit('updatePlayerPosition', jsonObject);
+		}
+
+		function output(message) {
+                        var currentTime = "<span class='time'>" +  moment().format('HH:mm:ss.SSS') + "</span>";
+                        var element = $("<div>" + currentTime + " " + message + "</div>");
+			$('#console').prepend(element);
+		}
+        $(document).keydown(function(e){
+            switch(e.keyCode){
+                case 13:
+                    $('#send').click();
+                    break;
+                case 40:
+                    console.log('down')
+                    playerMovement({ xMovement: 0, yMovement: -1 })
+                    break;
+                case 38:
+                    console.log('up')
+                    playerMovement({ xMovement: 0, yMovement: 1 })
+                    break;
+                case 39:
+                    console.log('right')
+                    playerMovement({ xMovement: 1, yMovement: 0 })
+                    break;
+                case 37:
+                    console.log('left')
+                    playerMovement({ xMovement: -1, yMovement: 0 })
+                    break;
+            }
+	});
+	</script>
+</head>
+
+<body>
+
+	<h1>Real Time Player App</h1>
+
+	<br/>
+
+	<div id="console" class="well">
+	</div>
+
+        <form class="well form-inline" onsubmit="return false;">
+           <input id="msg" class="input-xlarge" type="text" placeholder="Type something..."/>
+           <button type="button" onClick="sendMessage()" class="btn" id="send">Send</button>
+           <button type="button" onClick="sendDisconnect()" class="btn">Disconnect</button>
+        </form>
+
+</body>
+
+</html>
