@@ -1,7 +1,0 @@
-/Users/ereilly/Downloads/netty-socketio.spring-master/src/main/java/com/jamesye/prototypes/realtimeserver/ServerCommandLineRunner.java
-/Users/ereilly/Downloads/netty-socketio.spring-master/src/main/java/com/jamesye/prototypes/realtimeserver/Controller/GameController.java
-/Users/ereilly/Downloads/netty-socketio.spring-master/src/main/java/com/jamesye/prototypes/realtimeserver/Service/GameService.java
-/Users/ereilly/Downloads/netty-socketio.spring-master/src/main/java/com/jamesye/prototypes/realtimeserver/RealTimeServerApplication.java
-/Users/ereilly/Downloads/netty-socketio.spring-master/src/main/java/com/jamesye/prototypes/realtimeserver/Model/PlayerModel.java
-/Users/ereilly/Downloads/netty-socketio.spring-master/src/main/java/com/jamesye/prototypes/realtimeserver/Storage/PlayerStorage.java
-/Users/ereilly/Downloads/netty-socketio.spring-master/src/main/java/com/jamesye/prototypes/realtimeserver/Model/PlayerMovementModel.java
